@@ -18,10 +18,15 @@ dash.register_page(__name__, path="/ml", name="Machine Learning")
 # 📥 Carga de datos
 jugadores_df = pd.read_excel("data/Jugadores1A_2024.xlsx")
 jugadores_df.replace("-", np.nan, inplace=True)
+jugadores_df.infer_objects(copy=False)
 
 # Simular columna "Potencial" si no existe
 if "Potencial" not in jugadores_df.columns:
-    jugadores_df["Potencial"] = np.random.choice(["Alto", "Medio", "Bajo"], size=len(jugadores_df))
+    #jugadores_df["Potencial"] = np.random.choice(["Alto", "Medio", "Bajo"], size=len(jugadores_df))
+    nuevas_columnas = pd.DataFrame({
+    "Potencial": np.random.choice(["Alto", "Medio", "Bajo"], size=len(jugadores_df)),
+    })
+    jugadores_df = pd.concat([jugadores_df, nuevas_columnas], axis=1)
 
 # 🎯 Variables disponibles para entrenamiento
 columnas_numericas = [
